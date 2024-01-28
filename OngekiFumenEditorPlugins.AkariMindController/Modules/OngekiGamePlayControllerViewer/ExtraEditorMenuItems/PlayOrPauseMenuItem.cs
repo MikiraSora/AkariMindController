@@ -12,16 +12,16 @@ using System.Threading.Tasks;
 
 namespace OngekiFumenEditorPlugins.AkariMindController.Modules.OngekiGamePlayControllerViewer.ExtraEditorMenuItems
 {
-    [Export(typeof(IFumenVisualEditorExtraMenuItemHandler))]
-    public class PlayOrPauseMenuItem : IFumenVisualEditorExtraMenuItemHandler
-    {
-        public string[] RegisterMenuPath { get; } = new[] { IFumenVisualEditorExtraMenuItemHandler.COMMON_EXT_MENUITEM_ROOT, "AkariMindController", "播放/暂停" };
+	[Export(typeof(IFumenVisualEditorExtraMenuItemHandler))]
+	public class PlayOrPauseMenuItem : IFumenVisualEditorExtraMenuItemHandler
+	{
+		public string[] RegisterMenuPath { get; } = new[] { "脚本", "AkariMindController", "播放/暂停" };
 
-        public async void Handle(FumenVisualEditorViewModel editor, EventArgs args)
-        {
-            var controller = IoC.Get<IOngekiGamePlayControllerViewer>();
-            if ((await controller.GetNotesManagerData()) is not NotesManagerData data)
-                return;
-        }
-    }
+		public async void Handle(FumenVisualEditorViewModel editor, EventArgs args)
+		{
+			var controller = IoC.Get<IOngekiGamePlayControllerViewer>();
+			if ((await controller.GetNotesManagerData()) is not NotesManagerData data)
+				return;
+		}
+	}
 }

@@ -96,6 +96,7 @@
                     </StackPanel>
                 </StackPanel>
             </StackPanel>
+            <Button HorizontalAlignment="Left" Click="Button_Click_9">PlayAllSounds</Button>
         </StackPanel>
 
         <ScrollViewer

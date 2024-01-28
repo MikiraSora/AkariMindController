@@ -314,5 +314,10 @@ namespace MindControllerTestGUI
             AppendOutputLine($"--------------------------------------------");
 
         }
-    }
+
+		private void Button_Click_9(object sender, RoutedEventArgs e)
+		{
+			client.SendMessage(new PlayNoteSE());
+		}
+	}
 }

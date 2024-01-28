@@ -16,14 +16,6 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\..\..\ongeki bright memory patch\AkariMindController\AkiraMindController.Communication\AkiraMindController.Communication.csproj" />
-    <ProjectReference Include="..\..\..\Source\Repos\OngekiFumenSupport\refHost\OngekiFumenEditor\Dependences\gemini\src\Gemini\Gemini.csproj">
-      <Private>false</Private>
-      <ExcludeAssets>runtime</ExcludeAssets>
-    </ProjectReference>
-    <ProjectReference Include="..\..\..\Source\Repos\OngekiFumenSupport\refHost\OngekiFumenEditor\OngekiFumenEditor\OngekiFumenEditor.csproj">
-      <Private>false</Private>
-      <ExcludeAssets>runtime</ExcludeAssets>
-    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <Page Update="Modules\OngekiGamePlayControllerViewer\Views\OngekiGamePlayControllerViewerView.xaml">
@@ -32,5 +24,15 @@
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Utils\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Reference Include="Gemini">
+      <HintPath>..\..\..\Source\Repos\OngekiFumenEditor\OngekiFumenEditor\bin\Debug\net6.0-windows\Gemini.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
+    <Reference Include="OngekiFumenEditor">
+      <HintPath>..\..\..\Source\Repos\OngekiFumenEditor\OngekiFumenEditor\bin\Debug\net6.0-windows\OngekiFumenEditor.dll</HintPath>
+      <Private>false</Private>
+    </Reference>
   </ItemGroup>
 </Project>

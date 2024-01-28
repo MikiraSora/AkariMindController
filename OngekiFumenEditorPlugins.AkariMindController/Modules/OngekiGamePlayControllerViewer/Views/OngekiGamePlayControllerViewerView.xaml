@@ -177,6 +177,15 @@
                     <StackPanel Orientation="Horizontal">
                         <Button cal:Message.Attach="PlayGuideSE()" IsEnabled="{Binding IsConnected}">播放节奏音效</Button>
                     </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBox
+                            Width="100"
+                            Margin="10,0,0,0"
+                            VerticalAlignment="Center"
+                            Text="{Binding CueId}" />
+                        <Button cal:Message.Attach="PlayCustomSound()" IsEnabled="{Binding IsConnected}">播放指定cueId的音效</Button>
+                    </StackPanel>
+
 
                     <GroupBox Margin="5">
                         <GroupBox.Header>
