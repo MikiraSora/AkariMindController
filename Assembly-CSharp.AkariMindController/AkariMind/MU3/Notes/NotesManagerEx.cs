@@ -33,7 +33,9 @@ namespace AkariMindControllers.AkariMind.MU3.Notes
 		private NoteControlList _noteControlList;
 		private float _curFrame;
 		private NotesNodeCache _notesCache;
+		private bool _isForceFinish;
 		private float _frameNoteStart;
+		private float _frameNoteEnd;
 		private float _framePlayStart;
 		private bool _pause;
 		private AutoplayLaneCollection apfList;
@@ -544,6 +546,32 @@ namespace AkariMindControllers.AkariMind.MU3.Notes
 			var r = orig_loadScore(sessionInfo, isStageDazzling);
 			apfList = (Singleton<ReaderMain>.instance as ReaderMainEx)?.APFLanes;
 			return r;
+		}
+
+		public void DumpUnfinishInfo()
+		{
+			PatchLog.WriteLine($"-------OnDumpUnfinishInfo()------");
+			PatchLog.WriteLine($"Singleton<GameSound>.instance.gameBGM.isPlay:{Singleton<GameSound>.instance.gameBGM.isPlay}");
+			PatchLog.WriteLine($"_curFrame > _frameNoteEnd:{_curFrame > _frameNoteEnd}");
+			foreach (var ctrl in _noteControlList.Where(x => !x.isEnd))
+			{
+				var str = $"frame:{ctrl.frame}  speed:{ctrl.speed}  state:{ctrl.notesBase?.getCurrentState()}  ";
+
+				if (ctrl.objBeam is BeamObj bo)
+					str += $"[BEAM] totalGrid:{bo.grid} ";
+				if (ctrl.objNote is NoteObj no)
+					str += $"[NOTE] totalGrid:{no.grid}";
+				if (ctrl.objBullet is BulletObj blt)
+					str += $"[BULT] totalGrid:{blt.grid}  strId:{blt.pallete?.strID}";
+
+				PatchLog.WriteLine(str);
+			}
+			PatchLog.WriteLine($"-------------");
+		}
+
+		public void ForceEndGamePlay()
+		{
+			_isForceFinish = true;
 		}
 	}
 }

@@ -343,6 +343,22 @@ namespace OngekiFumenEditorPlugins.AkariMindController.Modules.OngekiGamePlayCon
 			await SendMessageAsync<PlayGuideSE>();
 		}
 
+		public async void ForceEnd()
+		{
+			if (ConnectStatus != ConnectStatus.Connected)
+				return;
+
+			await SendMessageAsync<ForceEndGamePlay>();
+		}
+
+		public async void DumpUnfinishInfo()
+		{
+			if (ConnectStatus != ConnectStatus.Connected)
+				return;
+
+			await SendMessageAsync<DumpUnfinishInfo>();
+		}
+
 		public async Task<NotesManagerData?> GetNotesManagerData()
 		{
 			if (ConnectStatus != ConnectStatus.Connected)

@@ -43,8 +43,10 @@
     <Compile Include="AkariCommand\DumpNoteManagerAutoPlayData.cs" />
     <Compile Include="AkariCommand\CalculateNextAutoPlayData.cs" />
     <Compile Include="AkariCommand\GetNoteManagerAutoPlayData.cs" />
+    <Compile Include="AkariCommand\DumpUnfinishInfo.cs" />
     <Compile Include="AkariCommand\PlayNoteSE.cs" />
     <Compile Include="AkariCommand\PlayCustomCommonSound.cs" />
+    <Compile Include="AkariCommand\ForceEndGamePlay.cs" />
     <Compile Include="AkariCommand\SetNoteManagerValue.cs" />
     <Compile Include="AkariCommand\GetNoteManagerValue.cs" />
     <Compile Include="AkariCommand\AutoPlay.cs" />

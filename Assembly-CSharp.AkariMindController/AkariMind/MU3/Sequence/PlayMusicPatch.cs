@@ -24,6 +24,8 @@ namespace AkariMindControllers.AkariMind.MU3.Sequence
 	[MonoModPatch("global::MU3.Sequence.PlayMusic")]
 	internal class PlayMusicPatch : PlayMusic
 	{
+		private const string TAG = "PlayMusicPatchEvt";
+
 		private GameEngine _gameEngine;
 		private SessionInfo _sessionInfo;
 
@@ -40,23 +42,35 @@ namespace AkariMindControllers.AkariMind.MU3.Sequence
 			orig_Enter_Play();
 
 			//register messages.
-			Controller.RegisterMessageHandler<RestartGamePlay>(OnRequestRestartGamePlay);
-			Controller.RegisterMessageHandler<ResumeGamePlay>(OnRequestResumeGamePlay);
-			Controller.RegisterMessageHandler<PauseGamePlay>(OnRequestPauseGamePlay);
-			Controller.RegisterMessageHandler<PrintGamePlayStatus>(OnRequestPrintGamePlayStatus);
-			Controller.RegisterMessageHandler<ReloadFumen>(OnReloadFumen);
-			Controller.RegisterMessageHandler<PlayGuideSE>(OnPlayGuideSE);
-			Controller.RegisterMessageHandler<CalculateNextAutoPlayData>(OnCalculateNextAutoPlayData);
-			Controller.RegisterMessageHandler<GetNoteManagerValue>(OnRequestGetNoteManagerValue);
-			Controller.RegisterMessageHandler<AutoPlay>(OnAutoPlay);
-			Controller.RegisterMessageHandler<PlayCustomCommonSound>(OnPlayCustomCommonSound);
-			Controller.RegisterMessageHandler<PlayNoteSE>(OnPlayNoteSE);
-			Controller.RegisterMessageHandler<DumpNoteManagerAutoPlayData>(OnDumpNoteManagerAutoPlayData);
-			Controller.RegisterMessageHandler<GetNoteManagerAutoPlayData>(OnGetNoteManagerAutoPlayData);
-			Controller.RegisterMessageHandler<SeekToGamePlay>(OnRequestSeekToGamePlay);
-			Controller.RegisterMessageHandler<SetNoteManagerValue>(OnSetNoteManagerValue);
+			Controller.RegisterMessageHandler<RestartGamePlay>(TAG, OnRequestRestartGamePlay);
+			Controller.RegisterMessageHandler<ResumeGamePlay>(TAG, OnRequestResumeGamePlay);
+			Controller.RegisterMessageHandler<PauseGamePlay>(TAG, OnRequestPauseGamePlay);
+			Controller.RegisterMessageHandler<PrintGamePlayStatus>(TAG, OnRequestPrintGamePlayStatus);
+			Controller.RegisterMessageHandler<ReloadFumen>(TAG, OnReloadFumen);
+			Controller.RegisterMessageHandler<PlayGuideSE>(TAG, OnPlayGuideSE);
+			Controller.RegisterMessageHandler<CalculateNextAutoPlayData>(TAG, OnCalculateNextAutoPlayData);
+			Controller.RegisterMessageHandler<GetNoteManagerValue>(TAG, OnRequestGetNoteManagerValue);
+			Controller.RegisterMessageHandler<AutoPlay>(TAG, OnAutoPlay);
+			Controller.RegisterMessageHandler<PlayCustomCommonSound>(TAG, OnPlayCustomCommonSound);
+			Controller.RegisterMessageHandler<PlayNoteSE>(TAG, OnPlayNoteSE);
+			Controller.RegisterMessageHandler<DumpNoteManagerAutoPlayData>(TAG, OnDumpNoteManagerAutoPlayData);
+			Controller.RegisterMessageHandler<DumpUnfinishInfo>(TAG, OnDumpUnfinishInfo);
+			Controller.RegisterMessageHandler<GetNoteManagerAutoPlayData>(TAG, OnGetNoteManagerAutoPlayData);
+			Controller.RegisterMessageHandler<SeekToGamePlay>(TAG, OnRequestSeekToGamePlay);
+			Controller.RegisterMessageHandler<ForceEndGamePlay>(TAG, OnForceEndGamePlay);
+			Controller.RegisterMessageHandler<SetNoteManagerValue>(TAG, OnSetNoteManagerValue);
 
 			isPause = false;
+		}
+
+		private void OnForceEndGamePlay(ForceEndGamePlay message, IResponser responser)
+		{
+			ntMgrEx.ForceEndGamePlay();
+		}
+
+		private void OnDumpUnfinishInfo(DumpUnfinishInfo message, IResponser responser)
+		{
+			ntMgrEx.DumpUnfinishInfo();
 		}
 
 		private IEnumerator OnPlayNoteSE(PlayNoteSE message, IResponser responser)
@@ -343,6 +357,8 @@ namespace AkariMindControllers.AkariMind.MU3.Sequence
 		private void Leave_Play()
 		{
 			//unregister messages.
+			Controller.UnregisterSpecifyMessageAllHandler(TAG);
+			/*
 			Controller.UnregisterSpecifyMessageAllHandler<RestartGamePlay>();
 			Controller.UnregisterSpecifyMessageAllHandler<ResumeGamePlay>();
 			Controller.UnregisterSpecifyMessageAllHandler<PauseGamePlay>();
@@ -356,6 +372,7 @@ namespace AkariMindControllers.AkariMind.MU3.Sequence
 			Controller.UnregisterSpecifyMessageAllHandler<DumpNoteManagerAutoPlayData>();
 			Controller.UnregisterSpecifyMessageAllHandler<GetNoteManagerAutoPlayData>();
 			Controller.UnregisterSpecifyMessageAllHandler<CalculateNextAutoPlayData>();
+			*/
 		}
 
 		private IEnumerator OnRequestRestartGamePlay(RestartGamePlay message)
@@ -367,7 +384,7 @@ namespace AkariMindControllers.AkariMind.MU3.Sequence
 			yield return null;
 			_gameEngine.finishGame();
 			_gameEngine.playFinish();
-			base.setNextState(EState.Init);
+			setNextState(EState.Init);
 		}
 	}
 }

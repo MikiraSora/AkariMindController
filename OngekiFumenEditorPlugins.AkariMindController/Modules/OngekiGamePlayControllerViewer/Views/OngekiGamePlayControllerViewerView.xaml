@@ -103,6 +103,7 @@
                         <Button cal:Message.Attach="Play()" IsEnabled="{Binding IsConnected}">播放</Button>
                         <Button cal:Message.Attach="Pause()" IsEnabled="{Binding IsConnected}">暂停</Button>
                         <Button cal:Message.Attach="Restart()" IsEnabled="{Binding IsConnected}">重开</Button>
+                        <Button cal:Message.Attach="ForceEnd()" IsEnabled="{Binding IsConnected}">强制结束</Button>
                         <CheckBox
                             Margin="10,5,10,5"
                             Padding="2"
@@ -176,6 +177,7 @@
                 <StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <Button cal:Message.Attach="PlayGuideSE()" IsEnabled="{Binding IsConnected}">播放节奏音效</Button>
+                        <Button cal:Message.Attach="DumpUnfinishInfo()" IsEnabled="{Binding IsConnected}">打印未完成内容</Button>
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
                         <TextBox

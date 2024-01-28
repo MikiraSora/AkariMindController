@@ -8,66 +8,65 @@ using System.Threading;
 
 namespace AkiraMindController.Communication.Connectors
 {
-    public abstract class CommonConnectorBase : IConnector
-    {
-        [Serializable]
-        internal protected class Payload
-        {
-            public string typeName;
-            public string payloadJson;
-        }
+	public abstract class CommonConnectorBase : IConnector
+	{
+		[Serializable]
+		internal protected class Payload
+		{
+			public string typeName;
+			public string payloadJson;
+		}
 
-        private Dictionary<Type, List<RegisterHandler>> registeredHandlers = new();
+		private Dictionary<string, List<RegisterHandler>> registeredHandlers = new();
 
-        public void RegisterMessageHandler<T>(IConnector.OnReceviceMessageFunc<T> handler)
-        {
-            var type = typeof(T);
-            if (!registeredHandlers.TryGetValue(type, out var list))
-            {
-                list = new();
-                registeredHandlers[type] = list;
-            }
+		public void RegisterMessageHandler<T>(IConnector.OnReceviceMessageFunc<T> handler)
+			=> RegisterMessageHandler(ConvertTypeToTag(typeof(T)), handler);
 
-            if (list.Any(x => x.Check(handler)))
-            {
-                //it already has been added.
-                return;
-            }
+		public void RegisterMessageHandler<T>(string tag, IConnector.OnReceviceMessageFunc<T> handler)
+		{
+			if (!registeredHandlers.TryGetValue(tag, out var list))
+			{
+				list = new();
+				registeredHandlers[tag] = list;
+			}
 
-            list.Add(new RegisterHandler<T>(handler));
-            Log.WriteLine($"Registered message handler : {typeof(T).FullName} , id : {handler?.GetHashCode()}");
-        }
+			if (list.Any(x => x.Check(handler)))
+			{
+				//it already has been added.
+				return;
+			}
 
-        public void UnregisterMessageHandler<T>(IConnector.OnReceviceMessageFunc<T> handler)
-        {
-            var type = typeof(T);
-            if (!registeredHandlers.TryGetValue(type, out var list))
-                return;
+			list.Add(new RegisterHandler<T>(handler));
+			Log.WriteLine($"Registered message id : {handler?.GetHashCode()} , tag : {tag}");
+		}
 
-            if (list.FirstOrDefault(x => x.Check(handler)) is RegisterHandler refHndler)
-            {
-                list.Remove(refHndler);
-                Log.WriteLine($"Unregistered message handler : {typeof(T).FullName} , id : {handler?.GetHashCode()}");
-            }
-        }
+		public void UnregisterMessageHandler<T>(IConnector.OnReceviceMessageFunc<T> handler)
+		=> UnregisterSpecifyMessageAllHandler(ConvertTypeToTag(typeof(T)));
 
-        public void UnregisterSpecifyMessageAllHandler<T>()
-        {
-            var type = typeof(T);
-            if (!registeredHandlers.TryGetValue(type, out var list))
-                return;
+		public void UnregisterSpecifyMessageAllHandler(string tag)
+		{
+			if (!registeredHandlers.TryGetValue(tag, out var list))
+				return;
 
-            list.Clear();
-            Log.WriteLine($"Unregistered specify message handlers : {typeof(T).FullName}");
-        }
+			list.Clear();
+			Log.WriteLine($"Unregistered specify message tag : {tag}");
+		}
 
-        public void UnregisterAllMessageHandler()
-        {
-            registeredHandlers.Clear();
-            Log.WriteLine($"Unregistered all message handlers");
-        }
+		private string ConvertTypeToTag(Type type) => $"type:<{type.FullName}>";
 
-        public IEnumerable<RegisterHandler> GetTypeHandlers<T>() => GetTypeHandlers(typeof(T));
-        public IEnumerable<RegisterHandler> GetTypeHandlers(Type type) => registeredHandlers.TryGetValue(type, out var list) ? list : Enumerable.Empty<RegisterHandler>();
-    }
+		public void UnregisterSpecifyMessageAllHandler<T>()
+		{
+			var type = typeof(T);
+			UnregisterSpecifyMessageAllHandler(ConvertTypeToTag(type));
+		}
+
+		public void UnregisterAllMessageHandler()
+		{
+			registeredHandlers.Clear();
+			Log.WriteLine($"Unregistered all message handlers");
+		}
+
+		public IEnumerable<RegisterHandler> GetTypeHandlers<T>() => GetTypeHandlers(typeof(T));
+		public IEnumerable<RegisterHandler> GetTypeHandlers(Type type) => registeredHandlers.TryGetValue(ConvertTypeToTag(type), out var list) ? list : Enumerable.Empty<RegisterHandler>();
+	}
 }
